@@ -1,20 +1,39 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import React, { useState } from 'react';
+import { StyleSheet, View } from 'react-native';
+import MetaInput from './components/MetaInput';
+import MetasList from './components/MetasList';
 
 export default function App() {
+  const [metas, setMetas] = useState([]);
+
+  function adicionarMetaHandler(inputMeta) {
+    if (inputMeta.trim().length === 0) return;
+    setMetas((metasAtuais) => [...metasAtuais, inputMeta]);
+  }
+
+  function deletarMetaHandler(indexParaRemover) {
+    setMetas((metasAtuais) => {
+      return metasAtuais.filter((meta, index) => index !== indexParaRemover);
+    });
+  }
+
   return (
-    <View style={styles.container}>
-      <Text>Olá, nicole ! Meu primeiro App.</Text>
-      <StatusBar style="auto" />
+    <View style={styles.mainContainer}>
+      <MetaInput onAddMeta={adicionarMetaHandler} />
+      <View style={styles.metaContainer}>
+        <MetasList array={metas} onDeleteMeta={deletarMetaHandler} />
+      </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
+  mainContainer: {
+    padding: 30,
     flex: 1,
-    backgroundColor: '#0898db',
-    alignItems: 'center',
-    justifyContent: 'center',
+    flexDirection: 'column',
+  },
+  metaContainer: {
+    flex: 15,
   },
 });
